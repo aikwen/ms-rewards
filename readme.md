@@ -1,0 +1,1 @@
+auto search and gain points
