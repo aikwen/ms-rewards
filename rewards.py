@@ -17,13 +17,13 @@ def get_cookies():
                 page.goto("https://cn.bing.com/")
                 # wait for load
                 page.wait_for_load_state("load")
-                print("页面加载完毕")
+                print("page loaded")
                 # wait for login
                 page.wait_for_selector("id=id_n", state='visible')
                 cookies = context.cookies("https://cn.bing.com/")
                 with open("cookies.txt", "w") as f:
                     f.write(json.dumps(cookies))
-                    print("cookies已保存")
+                    print("cookies file saved")
     return
 
 
@@ -77,15 +77,15 @@ def main(context):
             coin = get_current_coin(page)
             seconds = random_seconds()
             words = random.choice(li)
-            print(f"{datetime.datetime.now().strftime('[%m-%d %H:%M:%S]')} 当前获得积分:[{coin:>3}/90], ", end=" ")
+            print(f"{datetime.datetime.now().strftime('[%m-%d %H:%M:%S]')} current points:[{coin:>3}/90], ", end=" ")
             if int(coin) >= 90:
                 break
             else:
-                print(f"下一次搜索在{seconds}秒后, 搜索内容:{words};")
+                print(f"the next search will be in {seconds} s, search target:{words};")
             search(page, words)
             page.wait_for_timeout(seconds * 1000)
 
-        print("结束")
+        print("end")
 
 
 def args_parser():
@@ -102,6 +102,6 @@ if __name__ == '__main__':
         with open_browser() as b:
             with b.new_context() as c:
                 if load_cookies(c) is None:
-                    print("cookies 不存在")
+                    print("cookies.txt not found")
                     sys.exit()
                 main(c)
