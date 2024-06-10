@@ -46,8 +46,8 @@ def random_seconds():
 
 def get_current_coin(page):
     page.get_by_label("Microsoft Rewards").click()
-    page.wait_for_selector("#rewardsPanelContainer", state="visible")
-    text = page.frame_locator("iframe[title=\"Microsoft Rewards\"]").get_by_text("你已获得").first.text_content()
+    page.wait_for_selector("#rewid-f", state="visible")
+    text = page.get_by_role("complementary", name="帐户奖励和偏好设置").frame_locator("iframe").get_by_role("link", name=re.compile("在 Microsoft 必应上搜索.*")).first.text_content()
     mat = re.search(r"[0-9]+", text)
     if mat is None:
         return 0
