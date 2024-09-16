@@ -7,3 +7,4 @@
 out
 gen
 cookies.txt
+__pycache__
