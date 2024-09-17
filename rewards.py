@@ -1,12 +1,23 @@
 import json, random, sys
 import cookies
 from loguru import logger
+from pathlib import Path
+
+dir = Path(__file__).parent
+
+logger.add(
+    f"{dir.joinpath("rewards.log")}", rotation="1 month",
+)
 
 def random_seconds():
     return random.randint(150, 300)
 
 def get_words():
-    with open("items.txt", "r", encoding="utf-8") as f:
+    items_path = dir.joinpath("items.txt")
+    if not items_path.exists():
+        return None
+    
+    with open(f"{items_path}", "r", encoding="utf-8") as f:
         li = json.load(f)
     return li
 
@@ -23,6 +34,9 @@ def search(page, word):
 
 def main():
      words = get_words()
+     if words is None:
+        print("items.txt not found")
+        sys.exit()
      with cookies.open_browser(headless=True) as b:
             with b.new_context() as c:
                 # 导入 cookies
@@ -31,7 +45,7 @@ def main():
                     sys.exit()
                 # 打开页面开始搜索
                 with c.new_page() as page:
-                    for _ in range(10):
+                    for _ in range(35):
                         word = random.choice(words)
                         search(page, word)
 

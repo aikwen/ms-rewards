@@ -1,6 +1,6 @@
 from playwright.sync_api import sync_playwright
-import json, os
-
+import json
+from pathlib import Path
 
 def open_browser(headless=False, milliseconds=1500):
     pw = sync_playwright().start()
@@ -28,10 +28,11 @@ def dump_cookies():
 
 
 def load_cookies(context):
-    if not os.path.exists("cookies.txt"):
+    cookie_path = Path(__file__).parent.joinpath("cookies.txt")
+    if not cookie_path.exists():
         return None
 
-    with open("cookies.txt", "r") as f:
+    with open(f"{cookie_path}", "r") as f:
         cookies_list = json.load(f)
         for cookie in cookies_list:
             if isinstance(cookie["expires"], float):
